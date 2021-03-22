@@ -1,0 +1,5 @@
+#I think we should use kubernetes config map to inject the key files as string instead...
+keystore:
+  location: classpath:jwt.jks
+keypass: jwt
+alias: jwt
