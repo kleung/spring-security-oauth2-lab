@@ -1,0 +1,6 @@
+{
+  "clientId":"test_client",
+  "clientSecret": "secret",
+  "authorizedGrantTypes":["password", "refresh_token"],
+  "scope":["test"]
+}
