@@ -1,0 +1,6 @@
+{
+  "username":"testUser",
+  "password": "12345",
+  "enabled": true,
+  "authorities": ["read"]
+}

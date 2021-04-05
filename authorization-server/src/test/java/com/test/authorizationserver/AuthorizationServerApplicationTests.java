@@ -1,9 +1,20 @@
 package com.test.authorizationserver;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.test.authorizationserver.model.dto.ClientDetailsDto;
+import com.test.authorizationserver.model.dto.UserDto;
+import com.test.authorizationserver.repository.UserRepository;
+import com.test.authorizationserver.service.ClientDetailsDtoService;
+import com.test.authorizationserver.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.Resource;
+import org.springframework.security.oauth2.provider.NoSuchClientException;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -17,6 +28,55 @@ class AuthorizationServerApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private JdbcClientDetailsService clientDetailsService;
+
+    @Autowired
+    private ClientDetailsDtoService clientDetailsDtoService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Value("classpath:clientCredentialClient.json")
+    private Resource clientCredentialClientJson;
+
+    @Value("classpath:passwordClient.json")
+    private Resource passwordClientJson;
+
+    @Value("classpath:user.json")
+    private Resource userJson;
+
+    @BeforeEach
+    public void init() throws Exception {
+        if(this.userRepository.findByUsername("ken") == null) {
+            UserDto user = this.objectMapper.readValue(this.userJson.getInputStream(),
+                    UserDto.class);
+            this.userService.persist(user);
+        }
+
+        try {
+            this.clientDetailsService.loadClientByClientId("password_client");
+        } catch (NoSuchClientException nsce) {
+            ClientDetailsDto passwordClient = this.objectMapper.readValue(this.passwordClientJson.getInputStream(),
+                    ClientDetailsDto.class);
+            this.clientDetailsDtoService.persist(passwordClient);
+        }
+
+        try {
+            this.clientDetailsService.loadClientByClientId("client_credentials_client");
+        } catch (NoSuchClientException nsce) {
+            ClientDetailsDto clientCredentialsClient = this.objectMapper.readValue(this.clientCredentialClientJson.getInputStream(),
+                    ClientDetailsDto.class);
+            this.clientDetailsDtoService.persist(clientCredentialsClient);
+        }
+    }
 
     @Test
     void testPasswordFlowAuthentication() throws Exception {
@@ -42,6 +102,5 @@ class AuthorizationServerApplicationTests {
 
     //not sure how to test authorization code
 
-    //PROBLEM: getting invalid token error with "Cannot convert access token to JSON" for refresh token...
 
 }

@@ -3,3 +3,32 @@ keystore:
   location: classpath:jwt.jks
 keypass: jwt
 alias: jwt
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/oauth2user;AUTO_SERVER=true #use file based db for ease of development and testing
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      #ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true #to check database values...
