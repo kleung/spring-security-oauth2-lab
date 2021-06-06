@@ -1,5 +1,6 @@
 package com.test.authorizationserver.configuration;
 
+import com.test.authorizationserver.tokenenhancer.SubjectSettingTokenEnhancer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,4 +43,10 @@ public class JwtConfiguration {
 
         return converter;
     }
+
+    @Bean
+    public SubjectSettingTokenEnhancer subjectSettingTokenEnhancer() {
+        return new SubjectSettingTokenEnhancer();
+    }
+
 }

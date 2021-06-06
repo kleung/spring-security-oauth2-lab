@@ -1,0 +1,44 @@
+server:
+  port: 7070
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:oauth
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+    initialization-mode: always
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
+  h2:
+    console:
+      enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/oauth/token
+
+#logging.level.root=debug
+
+#added by ken
+keystore:
+  location: classpath:jwt.jks
+keypass: jwt
+alias: jwt
+public-key:
+  location: classpath:jwt.pub
+
+#security:
+#  oauth2:
+#    resource:
+#      token-info-uri: http://localhost:8080/oauth/check_token
+#    client:
+#      client-id: resourceserver
+#      client-secret: resourceserversecret
+#    resourceserver:
+#      jwt:
+#        issuer-uri: http://localhost:8080/
+
