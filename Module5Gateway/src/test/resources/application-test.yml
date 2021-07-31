@@ -1,0 +1,5 @@
+token:
+  port: ${wiremock.server.port}
+
+resource-server:
+  port: ${wiremock.server.port}
