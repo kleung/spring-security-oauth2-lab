@@ -1,0 +1,33 @@
+server:
+  port: 8180
+
+keystore:
+  location: classpath:jwt.jks
+keypass: jwt
+alias: jwt
+public-key:
+  location: classpath:jwt.pub
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: token_route
+          uri: ${token.host}:${token.port}
+          predicates:
+            - Path=/oauth/token
+        - id: resource_server_route
+          uri: ${resource-server.host}:${resource-server.port}
+          predicates:
+            - Path=/advice,/metric,/metric/{username},/profile,/profile/{username}
+          filters:
+            - TokenRelay=
+
+
+token:
+  host: http://localhost
+  port: 8080
+
+resource-server:
+  host: http://localhost
+  port: 7070
