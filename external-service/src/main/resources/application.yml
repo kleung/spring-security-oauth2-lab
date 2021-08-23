@@ -1,0 +1,21 @@
+authorization:
+  server:
+    url: http://localhost:8080/oauth/token?grant_type=client_credentials&scope=advice
+    clientId: external
+    clientSecret: external
+
+api:
+  gateway:
+    url: localhost:8180
+
+server:
+  port: 8200
+
+logging:
+  level:
+    com:
+      test:
+        externalservice:
+          feign:
+            client:
+              AdviceApiClient: DEBUG
